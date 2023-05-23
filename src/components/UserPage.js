@@ -5,6 +5,7 @@ import axios from "axios";
 
 const UserPage = () => {
   const [persons, setPersons] = useState([]);
+  const [person, setPerson] = useState([], null);
   useEffect(() => {
     loadUsersFromExternalAPI();
   }, []);
@@ -19,8 +20,33 @@ const UserPage = () => {
         console.log(err);
       });
   };
+  const selectClickHandler = (event, person) => {
+    setPerson(person);
+  };
+  const addNewRecord = () => {
+    const newPerson = {
+      id: 11,
+      name: "Test",
+      username: "test",
+      email: "test@gmail.com",
+      phone: "03138782",
+      website: "wwww.google.com",
+      address: {
+        street: "azki",
+        city: "tripoli",
+      },
+    };
+    setPersons([...persons, newPerson]);
+  };
   return (
     <div className="container">
+      <button
+        className="btn btn-secondary btn-sm"
+        style={{ float: "left" }}
+        onClick={addNewRecord}
+      >
+        Insert
+      </button>
       <h3>persons page</h3>
       <table className="table w-100">
         <thead>
@@ -31,6 +57,8 @@ const UserPage = () => {
             <th>Email</th>
             <th>Mobile</th>
             <th>website</th>
+            <th>Address</th>
+            <th>Select</th>
           </tr>
         </thead>
         <tbody>
@@ -43,11 +71,25 @@ const UserPage = () => {
                 <td>{item.email}</td>
                 <td>{item.phone}</td>
                 <td>{item.website}</td>
+                <td>
+                  <span className="text-success">{`${item.address.street} ${item.address.city}`}</span>
+                </td>
+                <td>
+                  <button
+                    className="btn"
+                    onClick={(event) => {
+                      selectClickHandler(event, item);
+                    }}
+                  >
+                    Select
+                  </button>
+                </td>
               </tr>
             );
           })}
         </tbody>
       </table>
+      <p>{person.name}</p>
     </div>
   );
 };
